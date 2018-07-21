@@ -5,8 +5,13 @@ from subprocess import Popen
 from urllib.request import urlopen
 from slackclient import SlackClient
 
-slack_token = os.environ.get("SLACK_API_TOKEN")
-sc = SlackClient(slack_token)
+
+SLACK_TOKEN = os.environ.get("SLACK_API_TOKEN")
+WORKS_DIR = os.environ.get("DODO_WORKS")
+assert SLACK_TOKEN
+assert WORKS_DIR
+
+sc = SlackClient(SLACK_TOKEN)
 
 users = sc.api_call('users.list')
 user_info = {user.get('id'): {'email': user.get('profile').get('email'), 'name': user.get('name')} for user in
@@ -45,7 +50,7 @@ name: {name}
 ## 두두에 바라는 점을 말씀해 주세요.
 
 {conversation.activity[a2][text]}
- 
+
 '''
 
 
@@ -92,7 +97,7 @@ def force_trigger():
     im_list = sc.api_call('im.list')
     im_info = [(im.get('id'), im.get('user')) for im in im_list.get('ims')]
     for dm, user in im_info:
-        global_d[user] = Conversation(user, dm)
+        GLOBAL_D[user] = Conversation(user, dm)
 
 
 def stand_up(e):
@@ -106,21 +111,21 @@ def stand_up(e):
         text = e.get('text', '')
 
         if text.startswith('standup'):
-            global_d[user] = Conversation(user, channel)
+            GLOBAL_D[user] = Conversation(user, channel)
 
-        elif user in global_d:
-            conversation = global_d[user]
+        elif user in GLOBAL_D:
+            conversation = GLOBAL_D[user]
 
             if conversation.activity.get('q2'):
                 conversation.activity.update(a2=e)
                 conversation.flush_conversation()
-                global_d.pop(user)
+                GLOBAL_D.pop(user)
             elif conversation.activity.get('q1'):
                 conversation.activity.update(a1=e)
                 conversation.second_dodo()
 
 
-global_d = {}
+GLOBAL_D = {}
 
 if __name__ == '__main__':
 

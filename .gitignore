@@ -1,2 +1,7 @@
-dday_bot/node_modules/
+node_modules/
 dday_bot/keys.js
+
+__pycache__/
+*.out
+.
+.DS_Store
