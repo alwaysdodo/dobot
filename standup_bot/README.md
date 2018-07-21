@@ -11,6 +11,6 @@ pip install -r requirements.txt
 DODO_WORKS=/path/to/works SLACK_API_TOKEN='xoxb-slack-token' python .
 
 # in dobot directory
-DODO_WORKS=/path/to/works SLACK_API_TOKEN='xoxb-slack-token' standup_bot
+DODO_WORKS=/path/to/works SLACK_API_TOKEN='xoxb-slack-token' python standup_bot
 ```
 
