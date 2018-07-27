@@ -1,7 +1,7 @@
-const axios = require("axios")
+const axios = require("axios");
 const {
     JSDOM
-} = require("jsdom")
+} = require("jsdom");
 
 const fetch = require('node-fetch');
 const botkit = require('botkit');
@@ -23,6 +23,23 @@ const botScope = [
 controller.hears('다음 두두는?', botScope, async (bot, message) => {
     var dday = await getDDay()
     bot.reply(message, `다음 두두는 .. ${dday}`);
+});
+
+controller.hears('낙서', ['direct_mention'], (bot, message) => {
+    bot.reply(message, {
+        attachments: [
+            {
+                title: "설명하기 힘들땐, 그려서 알려줘!",
+                actions: [
+                    {
+                    type: "button",
+                    text: "낙서하러 가자!",
+                    url: `${keys.botDrawerDomain}?channel=${message.channel}`
+                    }
+                ]
+            }
+        ]
+    });
 });
 
 async function postSlack() {
